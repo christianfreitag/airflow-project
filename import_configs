@@ -1,0 +1,28 @@
+#!/bin/bash
+
+CONFIGS_DIR="utils/configs"
+CONFIG_CONN_FILE_NAME="connections_consolidated.json"
+CONFIG_VAR_FILE_NAME="variables_consolidated.json"
+
+PYTHON_FILE_NAME="utils/consolidate_configs.py"
+
+# Criação dos diretórios se não existirem
+echo "Importing configurations..."
+python3 $PYTHON_FILE_NAME
+
+# Verificar se os arquivos foram criados
+if [ ! -e "${CONFIGS_DIR}/${CONFIG_VAR_FILE_NAME}" ]; then
+    echo "Missing variables file: ${CONFIGS_DIR}/${CONFIG_VAR_FILE_NAME}"
+    exit 1
+fi
+
+if [ ! -e "${CONFIGS_DIR}/${CONFIG_CONN_FILE_NAME}" ]; then
+    echo "Missing connections file: ${CONFIGS_DIR}/${CONFIG_CONN_FILE_NAME}"
+    exit 1
+fi
+
+# Importar variáveis e conexões
+docker compose exec --user airflow airflow-worker airflow variables import ${CONFIGS_DIR}/${CONFIG_VAR_FILE_NAME}
+docker compose exec --user airflow airflow-worker airflow connections import ${CONFIGS_DIR}/${CONFIG_CONN_FILE_NAME} --overwrite
+
+echo "Done"

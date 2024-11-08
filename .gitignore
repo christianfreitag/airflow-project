@@ -1,0 +1,6 @@
+__pycache__
+volumes
+/projetos/*
+.env
+/utils/configs/connections_consolidated.json
+/utils/configs/variables_consolidated.json

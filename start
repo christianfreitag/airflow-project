@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Defina os diretórios necessários
+LOGS_DIR="volumes/logs"
+PLUGINS_DIR="volumes/plugins"
+EXTRACT_DIR="volumes/extract"
+DATA_DIR="volumes/data"
+SRC_DIR="volumes/src"
+DAGS_DIR="projetos"
+
+# Criação dos diretórios se não existirem
+echo "Criando os diretórios necessários..."
+mkdir -p $LOGS_DIR $PLUGINS_DIR $EXTRACT_DIR $DATA_DIR $SRC_DIR $DAGS_DIR
+
+# Definindo permissões máximas (777) para os diretórios
+echo "Atribuindo permissões máximas aos diretórios..."
+chmod -R 777 $LOGS_DIR $DAGS_DIR $PLUGINS_DIR
+
+# Rodando o Docker Compose para subir o ambiente Airflow
+echo "Subindo o Docker Compose..."
+docker-compose up -d
+
+# Finalizando
+echo "Airflow e seus serviços foram inicializados."
